@@ -17,7 +17,7 @@ Vagrant.configure("2") do |config|
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
   # `vagrant box outdated`. This is not recommended.
-  # config.vm.box_check_update = false
+  config.vm.box_check_update = false
 
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine. In the example below,
@@ -42,15 +42,30 @@ Vagrant.configure("2") do |config|
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
   # Example for VirtualBox:
-  #
-  # config.vm.provider "virtualbox" do |vb|
-  #   # Display the VirtualBox GUI when booting the machine
-  #   vb.gui = true
-  #
-  #   # Customize the amount of memory on the VM:
-  #   vb.memory = "1024"
-  # end
-  #
+  
+  config.vm.provider "virtualbox" do |vb|  
+    # Display the VirtualBox GUI when booting the machine
+    # Don't boot with headless mode
+    vb.gui = false
+    # Use VBoxManage to customize the VM. For example to change memory:
+    #vb.customize ["modifyvm", :id, "--memory", "1024"]
+    #vb.customize ["modifyvm", :id, "--name", "LAMP (jessie64)"]
+    vb.customize ["modifyvm", :id, "--ostype", "Ubuntu_64"]
+    vb.customize ["modifyvm", :id, "--cpuexecutioncap", "50"]
+    # By default set to 1, change it to amount of your CPUs
+    vb.customize ["modifyvm", :id, "--cpus", "2" ]
+    # Or uncomment line above for Automatic set VirtualBox guest CPU count to the number of host cores
+    # WARNING ! Works on Linux Host ONLY
+    # vb.customize ["modifyvm", :id, "--cpus", `grep "^processor" /proc/cpuinfo | wc -l`.chomp ]
+    
+    # Customize the VM name:
+    vb.name = "Yii2 (xenial64)"
+    # Customize the amount of memory on the VM:
+    vb.memory = "1024"
+    # Customize the number of vCPUs on the VM:
+    vb.cpus = 2
+  end
+
   # View the documentation for the provider you are using for more
   # information on available options.
 
